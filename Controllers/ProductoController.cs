@@ -19,7 +19,8 @@ namespace Prueba_Tecnica.Controllers
         [HttpPost("crearproducto")]
         public async Task<ActionResult<IngresoProductoDTO>> CrearNuevoProducto(IngresoProductoDTO productoDTO)
         {
-            return null;
+            var nuevoProducto = await _ProductoService.CrearNuevoProducto(productoDTO);
+            return nuevoProducto;
         }
 
         [HttpGet("listarproductos")]

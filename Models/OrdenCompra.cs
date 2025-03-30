@@ -7,6 +7,6 @@
         public DateTime FechaCreacion { get; set; }
         public double Total {  get; set; }
 
-        public required ICollection<OrdenProducto> OrdenProductos { get; set; }
+        public ICollection<OrdenProducto> OrdenProductos { get; set; }
     }
 }

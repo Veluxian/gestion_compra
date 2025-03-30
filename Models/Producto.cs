@@ -6,6 +6,6 @@
         public required string Nombre { get; set; }
         public double Precio { get; set; }
 
-        public required ICollection<OrdenProducto> OrdenProducto { get; set; }
+        public ICollection<OrdenProducto> OrdenProducto { get; set; }
     }
 }

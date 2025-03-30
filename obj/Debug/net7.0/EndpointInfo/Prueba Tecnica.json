@@ -91,8 +91,109 @@
         }
       }
     },
-    "/api/ordenes/{id}": {
+    "/api/ordenes/traer{id}": {
       "get": {
+        "tags": [
+          "Orden"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoOrdenDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoOrdenDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoOrdenDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ordenes/modificar{id}": {
+      "put": {
+        "tags": [
+          "Orden"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngresoOrdenDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngresoOrdenDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngresoOrdenDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoOrdenDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoOrdenDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoOrdenDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ordenes/borrar{id}": {
+      "delete": {
         "tags": [
           "Orden"
         ],
@@ -226,6 +327,13 @@
         "properties": {
           "cliente": {
             "type": "string",
+            "nullable": true
+          },
+          "listaProductos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngresoProductoDTO"
+            },
             "nullable": true
           },
           "total": {

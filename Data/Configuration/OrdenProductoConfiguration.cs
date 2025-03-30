@@ -12,7 +12,7 @@ namespace Prueba_Tecnica.Data.Configuration
 
             builder.HasKey(e => e.IdOrdenProducto);
 
-            builder.Property(e => e.IdOrdenProducto).HasColumnName("ORDEN_PRODUCTO");
+            builder.Property(e => e.IdOrdenProducto).HasColumnName("ID_ORDEN_PRODUCTO");
             builder.Property(e => e.IdProducto).HasColumnName("ID_PRODUCTO");
             builder.Property(e => e.IdOrden).HasColumnName("ID_ORDEN");
 

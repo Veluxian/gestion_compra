@@ -3,6 +3,7 @@ using Prueba_Tecnica.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Prueba_Tecnica.Models;
 
 namespace Prueba_Tecnica.Controllers
 {
@@ -31,7 +32,7 @@ namespace Prueba_Tecnica.Controllers
             return Ok(listarOrdenes);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("traer{id}")]
         public async Task<ActionResult<IngresoOrdenDTO?>> ObtenerUnaOrdenPorId(int id)
         {
             var ordenPorId = await _OrdenesService.ObtenerUnaOrdenPorId(id);
@@ -42,8 +43,18 @@ namespace Prueba_Tecnica.Controllers
             return (ordenPorId);
         }
 
-        //[HttpPut("{id}")]
+        [HttpPut("modificar{id}")]
+        public async Task<ActionResult<IngresoOrdenDTO>> ModificarOrdenPorId(int id, IngresoOrdenDTO ordenDTO)
+        {
+            var ordenModificada = await _OrdenesService.ModificarOrdenPorId(id, ordenDTO);
+            return Ok(ordenModificada);
+        }
 
-        //[HttpDelete("{id}")]
+        [HttpDelete("borrar{id}")]
+        public async Task<ActionResult<IngresoOrdenDTO>> EliminarOrdenPorId(int id)
+        {
+            var ordenEliminada = await _OrdenesService.EliminarOrdenPorId(id);
+            return Ok(ordenEliminada);
+        }
     }
 }
