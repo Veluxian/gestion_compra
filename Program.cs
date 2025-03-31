@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Prueba_Tecnica.Data;
 using Prueba_Tecnica.Interfaces;
+using Prueba_Tecnica.Middleware;
 using Prueba_Tecnica.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 
@@ -12,11 +15,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PruebaTecnicaDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IOrdenesInterface, OrdenesService>();
 builder.Services.AddScoped<IProductoInterface, ProductoServices>();
-
 
 var app = builder.Build();
 
@@ -28,6 +30,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 

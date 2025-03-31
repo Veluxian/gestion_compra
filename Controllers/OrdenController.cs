@@ -21,32 +21,44 @@ namespace Prueba_Tecnica.Controllers
         [HttpPost("crearorden")]
         public async Task<ActionResult<IngresoOrdenDTO>> CrearNuevaOrden(IngresoOrdenDTO ordenDTO)
         {
+            if (ordenDTO == null)
+            {
+                return BadRequest("Los Datos de la orden no son validos");
+            }
             var nuevaOrden = await _OrdenesService.CrearNuevaOrden(ordenDTO);
             return Ok(nuevaOrden);
         }
 
         [HttpGet("listar")]
-        public ActionResult<IEnumerable<IngresoOrdenDTO>> TraerTodasOrdenes()
+        public ActionResult<IEnumerable<IngresoNuevaOrden>> TraerTodasOrdenes()
         {
             var listarOrdenes = _OrdenesService.TraerTodasOrdenes();
             return Ok(listarOrdenes);
         }
 
         [HttpGet("traer{id}")]
-        public async Task<ActionResult<IngresoOrdenDTO?>> ObtenerUnaOrdenPorId(int id)
+        public async Task<ActionResult<IngresoNuevaOrden?>> ObtenerUnaOrdenPorId(int id)
         {
             var ordenPorId = await _OrdenesService.ObtenerUnaOrdenPorId(id);
             if (ordenPorId == null)
             {
-                return NotFound();
+                return NotFound($"no se encuentra la orden {id} ya que no existe");
             }
-            return (ordenPorId);
+            return Ok(ordenPorId);
         }
 
         [HttpPut("modificar{id}")]
         public async Task<ActionResult<IngresoOrdenDTO>> ModificarOrdenPorId(int id, IngresoOrdenDTO ordenDTO)
         {
+            if (ordenDTO == null)
+            {
+                return BadRequest("los datos de la orden son invalidos");
+            }
             var ordenModificada = await _OrdenesService.ModificarOrdenPorId(id, ordenDTO);
+            if (ordenModificada == null)
+            {
+                return NotFound($"no se encontró la orden con Id {id}");
+            }
             return Ok(ordenModificada);
         }
 
@@ -54,7 +66,11 @@ namespace Prueba_Tecnica.Controllers
         public async Task<ActionResult<IngresoOrdenDTO>> EliminarOrdenPorId(int id)
         {
             var ordenEliminada = await _OrdenesService.EliminarOrdenPorId(id);
-            return Ok(ordenEliminada);
+            if (ordenEliminada == null)
+            {
+                return NotFound($"No se encontró la orden con ID {id}.");
+            }
+            return NoContent();
         }
     }
 }

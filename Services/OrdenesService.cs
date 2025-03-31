@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prueba_Tecnica.Data;
 using Prueba_Tecnica.DTO;
+using Prueba_Tecnica.Exceptions;
+using Prueba_Tecnica.Funciones;
 using Prueba_Tecnica.Interfaces;
 using Prueba_Tecnica.Models;
 
@@ -17,46 +19,60 @@ namespace Prueba_Tecnica.Services
 
         public async Task<IngresoOrdenDTO> CrearNuevaOrden(IngresoOrdenDTO ordenDTO)
         {
+            if (ordenDTO == null || ordenDTO.listaProductosId == null || !ordenDTO.listaProductosId.Any())
+            {
+                throw new BadRequestException("La orden debe contener productos.");
+            }
+
             var nuevaOrden = new OrdenCompra
             {
                 Cliente = ordenDTO.Cliente,
                 FechaCreacion = DateTime.Now,
-                Total = ordenDTO.Total,
+                Total = 0.0, 
                 OrdenProductos = new List<OrdenProducto>()
             };
 
-            foreach (var productoDTO in ordenDTO.listaProductos)
-            {
-                var productoAgregado = await _context.productos
-                    .Where(p => p.Nombre == productoDTO.Nombre)
-                    .Select(p => p.IdProducto)
-                    .FirstOrDefaultAsync();
+            double totalCalculado = 0.0;
+            var conteoMultiple = new HashSet<string>();
 
-                var productoRequerido = await _context.productos
-                    .FindAsync(productoAgregado);
+            foreach (var productoOrden in ordenDTO.listaProductosId)
+            {
+                conteoMultiple.Add(productoOrden.ToString());
+
+                var productoExistente = await _context.productos
+                    .FirstOrDefaultAsync(p => p.IdProducto == productoOrden);
+                if (productoExistente == null)
+                {
+                    throw new NotFoundException($"el producto con id '{productoOrden}' no existe");
+                }
+
+                totalCalculado += productoExistente.Precio;
 
                 nuevaOrden.OrdenProductos.Add(new OrdenProducto
                 {
-                    IdOrden = nuevaOrden.IdOrden,
-                    IdProducto = productoAgregado,
                     OrdenCompra = nuevaOrden,
-                    Producto = productoRequerido
+                    Producto = productoExistente,
                 });
             }
+            var variado = conteoMultiple.Count;
+
+            nuevaOrden.Total = DescuentoGrandesCompras.AplicarDescuentoGranCompra(totalCalculado);
+            nuevaOrden.Total = DescuentoVariedad.AplicarDescuentoVariedad(totalCalculado, variado);
 
             _context.ordenCompras.Add(nuevaOrden);
             await _context.SaveChangesAsync();
 
+            ordenDTO.Total = totalCalculado;
+
             return ordenDTO;
         }
 
-
-        public IEnumerable<IngresoOrdenDTO> TraerTodasOrdenes()
+        public IEnumerable<IngresoNuevaOrden> TraerTodasOrdenes()
         {
             var listarOrdenes = _context.ordenCompras
                 .Include(op => op.OrdenProductos)
                 .ThenInclude(p => p.Producto)
-                .Select(pc => new IngresoOrdenDTO
+                .Select(pc => new IngresoNuevaOrden
                 {
                     Cliente = pc.Cliente,
                     listaProductos = pc.OrdenProductos
@@ -71,13 +87,13 @@ namespace Prueba_Tecnica.Services
             return listarOrdenes;
         }
 
-        public async Task<IngresoOrdenDTO> ObtenerUnaOrdenPorId(int id)
+        public async Task<IngresoNuevaOrden> ObtenerUnaOrdenPorId(int id)
         {
             var ordenPorId = await _context.ordenCompras
                 .Where(pc => pc.IdOrden == id)
                 .Include(op => op.OrdenProductos)
                 .ThenInclude(p => p.Producto)
-                .Select(pc => new IngresoOrdenDTO
+                .Select(pc => new IngresoNuevaOrden
                 {
                     Cliente = pc.Cliente,
                     listaProductos = pc.OrdenProductos
@@ -89,13 +105,16 @@ namespace Prueba_Tecnica.Services
                         }).ToList(),
                     Total = pc.Total
                 }).FirstOrDefaultAsync();
+            if (ordenPorId == null)
+            {
+                throw new NotFoundException($"no se encontro la orden con Id {id}");
+            }
 
             return ordenPorId;
         }
 
         public async Task<IngresoOrdenDTO> ModificarOrdenPorId(int id, IngresoOrdenDTO ordenDTO)
         {
-            // 1. Buscar la orden existente incluyendo sus productos
             var ordenExistente = await _context.ordenCompras
                 .Include(o => o.OrdenProductos)
                 .ThenInclude(op => op.Producto)
@@ -103,38 +122,39 @@ namespace Prueba_Tecnica.Services
 
             if (ordenExistente == null)
             {
-                return null; // Orden no encontrada
+                throw new NotFoundException($"no se encontró la orden con Id {id}");
             }
 
-            // 2. Actualizar campos básicos de la orden
             ordenExistente.Cliente = ordenDTO.Cliente;
-            ordenExistente.Total = ordenDTO.Total;
 
-            // 3. Eliminar relaciones antiguas (productos anteriores)
             _context.ordenProductos.RemoveRange(ordenExistente.OrdenProductos);
 
-            // 4. Agregar nuevas relaciones (productos actualizados)
-            foreach (var productoDTO in ordenDTO.listaProductos)
+            double totalCalculado = 0.0;
+            foreach (var productosOrden in ordenDTO.listaProductosId)
             {
                 var productoExistente = await _context.productos
-                    .FirstOrDefaultAsync(p => p.Nombre == productoDTO.Nombre);
+                    .FirstOrDefaultAsync(p => p.IdProducto == productosOrden);
 
-                if (productoExistente != null)
+                if (productoExistente == null)
                 {
-                    ordenExistente.OrdenProductos.Add(new OrdenProducto
-                    {
-                        IdOrden = ordenExistente.IdOrden,
-                        IdProducto = productoExistente.IdProducto,
-                        OrdenCompra = ordenExistente,
-                        Producto = productoExistente
-                    });
+                    throw new NotFoundException($"El producto con id'{productosOrden}' no existe");
                 }
+
+                totalCalculado += productoExistente.Precio;
+
+                ordenExistente.OrdenProductos.Add(new OrdenProducto
+                {
+                    OrdenCompra = ordenExistente,
+                    Producto = productoExistente
+                });
             }
 
-            // 5. Guardar cambios
+            ordenExistente.Total = totalCalculado;
+
             await _context.SaveChangesAsync();
 
-            // 6. Retornar el DTO recibido (coherente con tu enfoque)
+            ordenDTO.Total = totalCalculado;
+
             return ordenDTO;
         }
 
@@ -142,12 +162,11 @@ namespace Prueba_Tecnica.Services
         {
             var ordenAEliminar = await _context.ordenCompras
                 .FirstOrDefaultAsync(pc => pc.IdOrden == id);
-
-            if (ordenAEliminar != null)
+            if (ordenAEliminar == null)
             {
-                _context.ordenCompras.Remove(ordenAEliminar);
+                throw new NotFoundException($"no se puede eliminar: la orden con Id {id} no existe");
             }
-
+            _context.ordenCompras.Remove(ordenAEliminar);
             await _context.SaveChangesAsync();
 
             return null;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prueba_Tecnica.Data;
 using Prueba_Tecnica.DTO;
+using Prueba_Tecnica.Exceptions;
 using Prueba_Tecnica.Interfaces;
 using Prueba_Tecnica.Models;
 
@@ -17,28 +18,28 @@ namespace Prueba_Tecnica.Services
 
         public async Task<IngresoProductoDTO> CrearNuevoProducto(IngresoProductoDTO productoDTO)
         {
-            // 1. Validar si el producto ya existe por nombre
+            if (productoDTO == null || string.IsNullOrWhiteSpace(productoDTO.Nombre) || productoDTO.Precio <=0)
+            {
+                throw new BadRequestException("Datos de producto inválidos. Asegúrese de proporcionar un nombre y un precio válido.");
+            }
+
             var productoExistente = await _context.productos
                 .FirstOrDefaultAsync(p => p.Nombre == productoDTO.Nombre);
 
             if (productoExistente != null)
             {
-                // Opcional: Lanzar excepción o retornar null si prefieres
-                return null; // Producto ya existe
+                throw new ConflictException($"El producto '{productoDTO.Nombre}' ya existe.");
             }
 
-            // 2. Crear la entidad Producto desde el DTO
             var nuevoProducto = new Producto
             {
                 Nombre = productoDTO.Nombre,
                 Precio = productoDTO.Precio
             };
 
-            // 3. Guardar en la base de datos
             _context.productos.Add(nuevoProducto);
             await _context.SaveChangesAsync();
 
-            // 4. Retornar el mismo DTO (como en tu lógica de órdenes)
             return productoDTO;
         }
         public IEnumerable<IngresoProductoDTO> ListarTodosProductos()
@@ -49,6 +50,12 @@ namespace Prueba_Tecnica.Services
                     Nombre = pc.Nombre,
                     Precio = pc.Precio
                 }).ToList();
+
+            if (!listarProductos.Any())
+            {
+                throw new NotFoundException("No hay productos disponibles.");
+            }
+
             return listarProductos;
         }
 

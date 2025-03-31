@@ -71,7 +71,6 @@ C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\staticwebasset
 C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Prueba Tecnica.props
 C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Prueba Tecnica.props
 C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\staticwebassets.pack.json
-C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\staticwebassets.upToDateCheck.txt
 C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\Prueba T.368BC8BF.Up2Date
 C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\Prueba Tecnica.dll
 C:\Users\Acer\Documents\programar\Prueba Tecnica\obj\Debug\net7.0\refint\Prueba Tecnica.dll

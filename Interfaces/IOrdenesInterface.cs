@@ -5,8 +5,8 @@ namespace Prueba_Tecnica.Interfaces
     public interface IOrdenesInterface
     {
         Task<IngresoOrdenDTO> CrearNuevaOrden(IngresoOrdenDTO ordenDTO);
-        IEnumerable<IngresoOrdenDTO> TraerTodasOrdenes();
-        Task<IngresoOrdenDTO> ObtenerUnaOrdenPorId(int IdOrden);
+        IEnumerable<IngresoNuevaOrden> TraerTodasOrdenes();
+        Task<IngresoNuevaOrden> ObtenerUnaOrdenPorId(int IdOrden);
         Task<IngresoOrdenDTO> ModificarOrdenPorId(int IdOrden, IngresoOrdenDTO ordenDTO);
         Task<IngresoOrdenDTO> EliminarOrdenPorId(int IdOrden);
     }

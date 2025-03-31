@@ -61,7 +61,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[Prueba_Tecnica.DTO.IngresoOrdenDTO, Prueba Tecnica, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Prueba_Tecnica.DTO.IngresoNuevaOrden, Prueba Tecnica, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -118,7 +118,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "Prueba_Tecnica.DTO.IngresoOrdenDTO",
+        "Type": "Prueba_Tecnica.DTO.IngresoNuevaOrden",
         "MediaTypes": [
           "text/plain",
           "application/json",
