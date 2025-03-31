@@ -1,0 +1,177 @@
+[
+  {
+    "ContainingType": "Prueba_Tecnica.Controllers.OrdenController",
+    "Method": "EliminarOrdenPorId",
+    "RelativePath": "api/ordenes/borrar{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Prueba_Tecnica.DTO.IngresoOrdenDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Prueba_Tecnica.Controllers.OrdenController",
+    "Method": "CrearNuevaOrden",
+    "RelativePath": "api/ordenes/crearorden",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ordenDTO",
+        "Type": "Prueba_Tecnica.DTO.IngresoOrdenDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Prueba_Tecnica.DTO.IngresoOrdenDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Prueba_Tecnica.Controllers.OrdenController",
+    "Method": "TraerTodasOrdenes",
+    "RelativePath": "api/ordenes/listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Prueba_Tecnica.DTO.IngresoNuevaOrden, Prueba Tecnica, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Prueba_Tecnica.Controllers.OrdenController",
+    "Method": "ModificarOrdenPorId",
+    "RelativePath": "api/ordenes/modificar{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "ordenDTO",
+        "Type": "Prueba_Tecnica.DTO.IngresoOrdenDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Prueba_Tecnica.DTO.IngresoOrdenDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Prueba_Tecnica.Controllers.OrdenController",
+    "Method": "ObtenerUnaOrdenPorId",
+    "RelativePath": "api/ordenes/traer{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Prueba_Tecnica.DTO.IngresoNuevaOrden",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Prueba_Tecnica.Controllers.ProductoController",
+    "Method": "CrearNuevoProducto",
+    "RelativePath": "api/productos/crearproducto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productoDTO",
+        "Type": "Prueba_Tecnica.DTO.IngresoProductoDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Prueba_Tecnica.DTO.IngresoProductoDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Prueba_Tecnica.Controllers.ProductoController",
+    "Method": "ListarTodosProductos",
+    "RelativePath": "api/productos/listarproductos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Prueba_Tecnica.DTO.IngresoProductoDTO, Prueba Tecnica, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
